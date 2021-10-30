@@ -1,5 +1,5 @@
 #pragma once
-#include "avrModule.hpp"
+#include "../Common/avrModule.hpp"
 #include "uartControl.hpp"
 #include "uartManager.hpp"
 #include "inttypes.h"

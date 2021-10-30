@@ -1,7 +1,7 @@
 #pragma once
 #include "avrModule.hpp"
-#include "uartManager.hpp"
-#include "twiControl.hpp"
+#include "../Communication/uartManager.hpp"
+#include "../Communication/twiControl.hpp"
 #include "programTimer.hpp"
 #include "inttypes.h"
 

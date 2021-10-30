@@ -1,9 +1,9 @@
 #include <avr/io.h>
-#include "avrModule.hpp"
-#include "programTimerModule.hpp"
-#include "twiControlModule.hpp"
-#include "uartControlModule.hpp"
-#include "simpleManager.hpp"
+#include "Common/avrModule.hpp"
+#include "Common/programTimerModule.hpp"
+#include "Communication/twiControlModule.hpp"
+#include "Communication/uartControlModule.hpp"
+#include "Common/simpleManager.hpp"
 
 int main()
 {

@@ -1,0 +1,33 @@
+image: docker:19.03.12
+services:
+  - docker:19.03.12-dind
+variables:
+  IMG_NAME: registry.gitlab.com/valut-smart-home/lights-and-rollers-controller/avr-make:$CI_COMMIT_BRANCH
+
+stages:
+  - build-compiler
+  - build
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+
+build-compiler-job:
+  stage: build-compiler
+  only:
+    changes:
+      - Compiler/Dockerfile
+      - .gitlab-ci.yml
+  script:
+    - docker build -t $IMG_NAME Compiler
+    - docker push $IMG_NAME
+
+build-job:
+  stage: build
+  script:
+    - docker pull $IMG_NAME
+    - docker run -v "$CI_PROJECT_DIR/src:/work" -w /work $IMG_NAME all
+  artifacts:
+    untracked: false
+    paths:
+      - "src/main.hex"
+    expire_in: 30 days

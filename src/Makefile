@@ -4,7 +4,7 @@ CC=avr-g++
 OBJCOPY=avr-objcopy
 CFLAGS=-std=gnu++17 -Wall -g -Os -mmcu=${MCU} -DF_CPU=${F_CPU} -I.
 TARGET=main
-SRCS=main.cpp programTimerModule.cpp twiControlModule.cpp uartControlModule.cpp simpleManager.cpp
+SRCS=main.cpp Common/*.cpp Communication/*.cpp Executive/*.cpp
 
 all:
 	${CC} ${CFLAGS} -o ${TARGET}.bin ${SRCS}

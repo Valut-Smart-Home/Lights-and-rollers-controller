@@ -1,6 +1,6 @@
 #include "simpleManager.hpp"
-#include "uartManager.hpp"
-#include "twiControl.hpp"
+#include "../Communication/uartManager.hpp"
+#include "../Communication/twiControl.hpp"
 #include "inttypes.h"
 #include "programTimer.hpp"
 
