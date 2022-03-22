@@ -6,88 +6,25 @@
 
 #include <avr/io.h>
 
-const unsigned int coilOperationalTimeMs = 10;
-
-uint8_t buttonsNow[]{ 0xFF, 0xFF, 0xFF, 0xFF };
-uint8_t buttonsLastRead[]{ 0xFF, 0xFF, 0xFF, 0xFF };
-uint8_t buttonsErr[]{ 0, 0, 0, 0 };
+uint8_t buttonsNow[]{ 0xFF };
+uint8_t buttonsLastRead[]{ 0xFF };
+uint8_t buttonsErr[]{ 0 };
 uint16_t light[16]{ 0 };
-uint8_t buttonPos{0}, lightPos{0};
-uint8_t writeCoilsBuff[2][2]{ {0x00, 0x00}, {0x00, 0x00} };
 
-uint8_t buttonCounter[4][8] {
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
+uint8_t buttonCounter[1][8] {
     {0,0,0,0,0,0,0,0},
 };
-uint16_t buttonConnection[4][8]{
+uint16_t buttonConnection[1][8]{
     { 
-        {(1 << 3)}, 
-        {(1 << 4) | (1 << 5)}, 
-        {(1 << 10) | (1 << 11) | (1 << 12) | (1 << 13)}, 
-        {(1 << 4) | (1 << 5)}, 
-        {0xFFFF}, 
-        {0xFFFF}, 
-        {(1 << 8) | (1 << 9)}, 
-        {(1 << 0) | (1 << 1)}, 
-    },
-    { 
-        {(1 << 8) | (1 << 9)}, 
-        {(1 << 10) | (1 << 11)}, 
-        {0}, 
-        {0}, 
-        {0}, 
-        {0}, 
-        {0}, 
-        {0}, 
-    },
-    { 
-        {(1 << 4) | (1 << 5)}, 
-        {(1 << 2)}, 
-        {0}, 
-        {0}, 
-        {(1 << 1)}, 
-        {(1 << 0) | (1 << 1)}, 
-        {0}, 
-        {0}, 
-    },
-    { 
-        {0}, 
-        {0}, 
-        {(1 << 10) | (1 << 11)}, 
-        {(1 << 12) | (1 << 13)}, 
+        {(1 << 6) | (1 << 7)| (1 << 5)},
+        {(1 << 4)}, 
         {(uint16_t)(1 << 15)}, 
-        {(1 << 14) | (uint16_t)(1 << 15)}, 
-        {0}, 
-        {0}, 
-    },
-};
-
-struct rollersConnectionStruct {
-    uint8_t buttonGroup;
-    uint8_t buttonUpPin;
-    uint8_t buttonDownPin;
-    uint8_t outputGroup;
-    uint8_t outputDirectionPin;
-    uint8_t outputRunPin;
-    unsigned long pushed{0};
-    uint8_t mask{0xFF};
-
-    rollersConnectionStruct(
-        const uint8_t && buttonGroup,
-        const uint8_t && buttonUpPin,
-        const uint8_t && buttonDownPin,
-        const uint8_t && outputGroup,
-        const uint8_t && outputDirectionPin,
-        const uint8_t && outputRunPin) : 
-        buttonGroup(buttonGroup),
-        buttonUpPin(buttonUpPin),
-        buttonDownPin(buttonDownPin),
-        outputGroup(outputGroup),
-        outputDirectionPin(outputDirectionPin),
-        outputRunPin(outputRunPin)
-    { }
+        {(1 << 13)}, 
+        {(1 << 12) | (1 << 14)}, 
+        {(1 << 0) | (1 << 1) | (1 << 8) | (1 << 9)}, 
+        {(1 << 0) | (1 << 1) | (1 << 8) | (1 << 9)}, 
+        {(1 << 10) | (1 << 11)}, 
+    }
 };
 
 enum class smState: uint8_t
@@ -97,22 +34,10 @@ enum class smState: uint8_t
     Reading,
     InitSending,
     Sending,
-    InitCoilSending,
-    CoilSending
 } state;
 
 const uint8_t Light_Setup[]{ 0x80, 0x00, 0x20, 0x04 };
-const uint8_t ReadButtons[]{ 0x41, 0x43, 0x45, 0x47 };
-const uint8_t WriteCoils[]{ 0x48, 0x4A };
-
-rollersConnectionStruct rollers[6]{ 
-    rollersConnectionStruct{(uint8_t)1,(uint8_t)2,(uint8_t)3,(uint8_t)0,(uint8_t)1,(uint8_t)0}, 
-    rollersConnectionStruct{(uint8_t)3,(uint8_t)6,(uint8_t)7,(uint8_t)1,(uint8_t)1,(uint8_t)0}, 
-    rollersConnectionStruct{(uint8_t)3,(uint8_t)0,(uint8_t)1,(uint8_t)1,(uint8_t)3,(uint8_t)2}, 
-    rollersConnectionStruct{(uint8_t)1,(uint8_t)5,(uint8_t)4,(uint8_t)1,(uint8_t)5,(uint8_t)4}, 
-    rollersConnectionStruct{(uint8_t)2,(uint8_t)2,(uint8_t)3,(uint8_t)0,(uint8_t)3,(uint8_t)2}, 
-    rollersConnectionStruct{(uint8_t)1,(uint8_t)6,(uint8_t)7,(uint8_t)0,(uint8_t)5,(uint8_t)4}, 
-};
+const uint8_t ReadButtons[]{ 0x41 };
 
 simpleManager::simpleManager(twiControl* twiControl, programTimer* programTimer):
     twi(twiControl),
@@ -196,125 +121,22 @@ bool switchLights(const uint16_t& lights)
     return init;
 }
 
-inline void doCoilChanges(bool changed[2])
-{
-    for (uint8_t i = 0; i < 2; ++i)
-    {
-        if (changed[i])
-        {
-            uint8_t v = 0xFF;
-            for (auto roller: rollers)
-            {
-                if (roller.outputGroup == i)
-                    v &= roller.mask;
-            }
-            writeCoilsBuff[i][0] = WriteCoils[i];
-            writeCoilsBuff[i][1] = v;
-        }
-    }
-}
-
-void checkCoilChanges()
-{
-    if (state == smState::Reading)
-    {
-        for (auto v: writeCoilsBuff)
-        {
-            if (v[0])
-            {
-                state = smState::InitCoilSending;
-                return;
-            }
-        }
-    }
-}
-
-inline void coilsResponse(const programTimer& timer)
-{
-    bool changed[2] = {false, false};
-
-    for (auto roller: rollers)
-    {
-        if (roller.buttonGroup == buttonPos)
-        {
-            uint8_t& btnUpCnt = buttonCounter[buttonPos][roller.buttonUpPin];
-            uint8_t& btnDownCnt = buttonCounter[buttonPos][roller.buttonDownPin];
-
-            if (btnUpCnt == 3)
-            {
-                uint8_t outDirPinMask = 1 << roller.outputDirectionPin;
-
-                if (roller.mask & outDirPinMask)
-                {
-                    roller.mask &= ~outDirPinMask;
-                    roller.pushed = timer.getTicks();
-                    changed[roller.outputGroup] = true;
-                }
-                else if (timer.toMs(timer.getTicks() - roller.pushed) > 2 * coilOperationalTimeMs)
-                {
-                     uint8_t outRunPinMask = 1 << roller.outputRunPin;
-
-                     if (roller.mask & outRunPinMask)
-                     {
-                         roller.mask &= ~outRunPinMask;
-                         changed[roller.outputGroup] = true;
-                     }
-                }
-            }
-            else if (btnDownCnt == 3)
-            {
-                uint8_t outDirPinMask = 1 << roller.outputDirectionPin;
-
-                if (!(roller.mask & outDirPinMask))
-                {
-                    roller.mask |= outDirPinMask;
-                    roller.pushed = timer.getTicks();
-                    changed[roller.outputGroup] = true;
-                }
-                else if (timer.toMs(timer.getTicks() - roller.pushed) > 2 * coilOperationalTimeMs)
-                {
-                    uint8_t outRunPinMask = 1 << roller.outputRunPin;
-
-                    if (roller.mask & outRunPinMask)
-                    {
-                        roller.mask &= ~outRunPinMask;
-                        changed[roller.outputGroup] = true;
-                    }
-                }
-            }
-            else
-            {
-                uint8_t outRunPinMask = 1 << roller.outputRunPin;
-                
-                if (!(roller.mask & outRunPinMask))
-                {
-                    roller.mask |= outRunPinMask;
-                    roller.pushed = timer.getTicks();
-                    changed[roller.outputGroup] = true;
-                }
-            }
-        }
-    }
-
-    doCoilChanges(changed);
-}
-
 void takeResponse()
 {
-    buttonsLastRead[buttonPos] &= buttonsNow[buttonPos];
+    buttonsLastRead[0] &= buttonsNow[0];
     for (uint8_t i = 0; i < 8; ++i)
     {
-        if (buttonsNow[buttonPos] & (1 << i))
-            buttonCounter[buttonPos][i] = 0;
+        if (buttonsNow[0] & (1 << i))
+            buttonCounter[0][i] = 0;
         else
         {
-            uint8_t& btnCnt = buttonCounter[buttonPos][i];
+            uint8_t& btnCnt = buttonCounter[0][i];
 
             if (btnCnt <= 3)
                 ++btnCnt;
             if (btnCnt == 3)
             {
-                const auto connections = buttonConnection[buttonPos];
+                const auto connections = buttonConnection[0];
 
                 if (switchLights(connections[i]))
                     state = smState::InitSending;
@@ -341,62 +163,25 @@ void simpleManager::Loop()
                 state = smState::Sending;
             break;
         case smState::Reading:
-            buttonsErr[buttonPos] = err;
+            buttonsErr[0] = err;
             if (!err)
             {
                 takeResponse();
-                coilsResponse(*this->timer);
             }
-            checkCoilChanges();
-            if (++buttonPos >= sizeof(buttonsNow))
-                buttonPos = 0;
-            twi->read(&ReadButtons[buttonPos], &buttonsNow[buttonPos], 1);
+            twi->read(&ReadButtons[0], &buttonsNow[0], 1);
             break;
         case smState::InitSending:
-            buttonsErr[buttonPos] = err;
+            buttonsErr[0] = err;
             if (!err)
             {
                 takeResponse();
-                coilsResponse(*this->timer);
             }
             makeLightCommand();
             twi->write((uint8_t*)&lightCommand, sizeof(lightCommand));
             state = smState::Sending;
             break;
         case smState::Sending:
-            if (++buttonPos >= sizeof(buttonsNow))
-                buttonPos = 0;
-            twi->read(&ReadButtons[buttonPos], &buttonsNow[buttonPos], 1);
-            state = smState::Reading;
-            break;
-        case smState::InitCoilSending:
-            buttonsErr[buttonPos] = err;
-            if (!err)
-            {
-                takeResponse();
-                coilsResponse(*this->timer);
-            }
-            if (writeCoilsBuff[0][0])
-                twi->write((uint8_t*)&writeCoilsBuff[0], sizeof(writeCoilsBuff[0]));
-            else
-                twi->write((uint8_t*)&writeCoilsBuff[1], sizeof(writeCoilsBuff[1]));
-            state = smState::Sending;
-            break;
-        case smState::CoilSending:
-            if (writeCoilsBuff[0][0])
-            {
-                writeCoilsBuff[0][0] = 0;
-                writeCoilsBuff[0][1] = 0;
-            }
-            else
-            {
-                writeCoilsBuff[1][0] = 0;
-                writeCoilsBuff[1][1] = 0;
-            }
-            
-            if (++buttonPos >= sizeof(buttonsNow))
-                buttonPos = 0;
-            twi->read(&ReadButtons[buttonPos], &buttonsNow[buttonPos], 1);
+            twi->read(&ReadButtons[0], &buttonsNow[0], 1);
             state = smState::Reading;
             break;
         default:
