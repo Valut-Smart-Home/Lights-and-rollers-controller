@@ -7,3 +7,4 @@ GTEST_OUTPUT="xml:/code/report.xml"
 all:
 	g++ ${CFLAGS} -o ${TARGET} ${SRCS} ${GTESTLIB}
 	./${TARGET} --gtest_output=${GTEST_OUTPUT}
+	rm ${TARGET}

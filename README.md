@@ -1,6 +1,15 @@
 # Valut Smart Home - Lights and rollers controller
 ## Description
 Lights and rollers controller is used to control lights and rollers in home using Arduino module with external modules. The main idea is that controller can work without any connections to another devices. It read states of switches and write controll to lights and rollers modules.
+## Usage
+### On-prem
+1. Dpeneded from docker and make - install it before continue
+2. Execute `make build-compiler` in root directory for build compiler
+3. Execute `make build` in root directory for build `main.hex` file
+4. \[Optional\] Execute `make test` in root directory for make unit tests
+5. \[Optional\] Execute (avrdude dependency) `make flash` for load to uC
+### Gitlab
+There is configured pipeline in gitlab for building compiler, build hex file and tests, you can download artifacts or make a fork if you want to do changes
 ## Technologies
 - C++ 17
 ## Modules

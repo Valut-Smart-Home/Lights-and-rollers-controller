@@ -26,11 +26,11 @@ build-job:
   stage: build
   script:
     - docker pull $IMG_NAME
-    - docker run -v "$CI_PROJECT_DIR/src:/work" -w /work $IMG_NAME all
+    - docker run -v "$CI_PROJECT_DIR:/code" -w /code/src $IMG_NAME
   artifacts:
     untracked: false
     paths:
-      - "src/main.hex"
+      - "main.hex"
     expire_in: 30 days
 
 test-job:

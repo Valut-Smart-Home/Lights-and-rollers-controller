@@ -1,17 +1,10 @@
 MCU=atmega328
 F_CPU=16000000UL
-CC=avr-g++
-OBJCOPY=avr-objcopy
 CFLAGS=-std=gnu++17 -Wall -g -Os -mmcu=${MCU} -DF_CPU=${F_CPU} -I.
 TARGET=main
-SRCS=main.cpp Common/*.cpp Communication/*.cpp Executive/*.cpp
+SRCS=main.cc
 
 all:
-	${CC} ${CFLAGS} -o ${TARGET}.bin ${SRCS}
-	${OBJCOPY} -j .text -j .data -O ihex ${TARGET}.bin ${TARGET}.hex
-
-flash:
-	avrdude -p ${MCU} -c usbasp -U flash:w:${TARGET}.hex:i -F -P usb
-
-clean:
-	rm -f *.bin *.hex
+	avr-g++ ${CFLAGS} -o ${TARGET}.bin ${SRCS}
+	avr-objcopy -j .text -j .data -O ihex ${TARGET}.bin ../${TARGET}.hex
+	rm ${TARGET}.bin
