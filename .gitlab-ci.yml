@@ -7,6 +7,7 @@ variables:
 stages:
   - build-compiler
   - build
+  - test
 
 before_script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
@@ -15,10 +16,10 @@ build-compiler-job:
   stage: build-compiler
   only:
     changes:
-      - Compiler/Dockerfile
+      - compiler/Dockerfile
       - .gitlab-ci.yml
   script:
-    - docker build -t $IMG_NAME Compiler
+    - docker build -t $IMG_NAME compiler
     - docker push $IMG_NAME
 
 build-job:
@@ -31,3 +32,13 @@ build-job:
     paths:
       - "src/main.hex"
     expire_in: 30 days
+
+test-job:
+  stage: test
+  script:
+    - docker pull $IMG_NAME
+    - docker run -v "$CI_PROJECT_DIR:/code" -w /code/tests $IMG_NAME
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
