@@ -14,7 +14,7 @@ namespace lights_and_rollers::hardware {
       void Init() override;
       void Execute() override;
 
-      void is_send_ready();
+      bool is_send_ready();
       void to_send(const uint8_t &byte);
 
       bool is_new_byte();

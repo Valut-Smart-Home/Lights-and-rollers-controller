@@ -4,23 +4,22 @@
 #include "../hardware/i2c.h"
 #include "../hardware/time.h"
 #include "../hardware/uart.h"
-#include "../input/button.h"
-#include "../input/roller.h"
+// #include "../input/button.h"
+// #include "../input/roller.h"
 
 lights_and_rollers::hardware::Eeprom eeprom = {};
 
 namespace lights_and_rollers::base {
   void Setup::CreateObjects()
   {
-    int module_index = 0;
-    #define CREATE_MODULE(T, name, ...) T name{__VA_ARGS__}; modules[module_index++] = &name;
+    #define CREATE_MODULE(T, name, ...) T name{__VA_ARGS__}; modules[moduleCounter++] = &name;
 
     CREATE_MODULE(hardware::Time, time)
     CREATE_MODULE(hardware::Adc, adc)
     CREATE_MODULE(hardware::I2c, i2c)
     CREATE_MODULE(hardware::Uart, uart)
 
-    CREATE_MODULE(input::Button, btn_input, time, i2c)
+    // CREATE_MODULE(input::Button, btn_input, time, i2c)
 
     #undef CREATE_MODULE
   }

@@ -7,7 +7,7 @@ namespace lights_and_rollers::base {
   class Module
   {
     public:  
-      Module(Stage stage): stage(stage) {};
+      Module(Stage stage): stage{stage} {};
       
       virtual void Init() {};
       virtual void Execute() {};

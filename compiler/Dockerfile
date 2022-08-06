@@ -14,6 +14,8 @@ RUN git clone --depth=1 -b main -q https://github.com/google/googletest.git /goo
     && cd /googletest/build \
     && cmake .. && make && make install \
     && cd ~ \
-    && rm -rf /googletest
+    && rm -rf /googletest \
+    && rm -rf /usr/local/include/gtest/ \
+    && rm -rf /usr/local/include/gmock/
 RUN apk del git cmake jq curl
 ENTRYPOINT ["make"]
