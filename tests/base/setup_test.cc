@@ -39,7 +39,7 @@ TEST(BaseSetup, CreateObjects) {
     }
 }
 
-TEST(BaseSetup, ReadConfiguration) {
+TEST(BaseSetup, DISABLED_ReadConfiguration) {
     FAIL() << "Not implemented";
 }
 
@@ -61,7 +61,7 @@ TEST(BaseSetup, InitModules) {
     }
 }
 
-TEST(BaseSetup, SetupPowerOut) {
+TEST(BaseSetup, DISABLED_SetupPowerOut) {
     FAIL() << "Not implemented";
 }
 
