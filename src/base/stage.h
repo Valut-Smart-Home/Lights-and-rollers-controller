@@ -4,6 +4,7 @@
 namespace lights_and_rollers::base {
   enum class Stage {
     kHardwareInteraction,
+    kHardwareMangement,
     kReadInputs,
     kInterpretateInputs,
     kExecuteProgram,

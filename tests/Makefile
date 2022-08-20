@@ -1,6 +1,6 @@
 CFLAGS=-std=gnu++17 -I.
 TARGET=test
-SRCS=*/*.cc ../src/base/*.cc
+SRCS=*/*.cc ../src/base/*.cc ../src/hwd_managment/*.cc
 GTESTLIB=-lgtest -lgtest_main
 GTEST_OUTPUT="xml:/code/report.xml"
 

@@ -19,7 +19,7 @@ namespace lights_and_rollers::base {
             void SetupPowerOut();
             void ExecuteModules();
         protected:
-            const static size_t N = 4;
+            const static size_t N = 5;
             lights_and_rollers::base::Module* modules[N];
             size_t moduleCounter = 0;
     };

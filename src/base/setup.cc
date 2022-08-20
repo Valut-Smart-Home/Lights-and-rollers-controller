@@ -4,6 +4,7 @@
 #include "../hardware/i2c.h"
 #include "../hardware/time.h"
 #include "../hardware/uart.h"
+#include "../hwd_managment/i2c_manager.h"
 // #include "../input/button.h"
 // #include "../input/roller.h"
 
@@ -19,7 +20,9 @@ namespace lights_and_rollers::base {
     CREATE_MODULE(hardware::I2c, i2c)
     CREATE_MODULE(hardware::Uart, uart)
 
-    // CREATE_MODULE(input::Button, btn_input, time, i2c)
+    CREATE_MODULE(hwd_management::I2cManager, i2cManager, &i2c);
+
+    // CREATE_MODULE(input::Button, btn_input, &time, &i2cManager)
 
     #undef CREATE_MODULE
   }

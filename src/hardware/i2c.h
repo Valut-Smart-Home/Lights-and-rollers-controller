@@ -15,9 +15,10 @@ namespace lights_and_rollers::hardware {
       void Execute() override;
 
       bool is_ready();
-      void read(uint8_t id, uint8_t address, uint8_t count);
-      void write(uint8_t id, uint8_t address, uint8_t count);
       uint8_t buffer[255];
+      void ExecuteBuffer(const uint8_t&& count);
+    protected:
+      bool ready;
   };
 }
 
