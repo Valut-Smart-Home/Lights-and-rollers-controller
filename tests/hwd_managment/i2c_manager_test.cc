@@ -14,7 +14,10 @@ class TestUser : public lights_and_rollers::base::TwiUser {
 class TestTwiHardware : public lights_and_rollers::hardware::Twi {
     public:
         void set_ready(bool value) {
-            ready = value;
+            state_ = !value;
+        }
+        void set_ok(bool value) {
+            ok_ = value;
         }
 };
 

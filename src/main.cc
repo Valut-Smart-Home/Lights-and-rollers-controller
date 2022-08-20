@@ -1,5 +1,8 @@
 #include "base/setup.h"
 
+// TIMER0 used by Time module
+// PC4, PC5 used by Twi module
+
 int main()
 {
   auto setup = lights_and_rollers::base::Setup();
