@@ -1,22 +1,17 @@
-//#include "base/setup.h"
+#include "base/setup.h"
 
 int main()
 {
-  // auto setup = base::Setup();
-  // auto modules = setup.CreateObjects();
-  
+  auto setup = lights_and_rollers::base::Setup();
+  setup.CreateObjects();
   // setup.ReadConfiguration();
-  
-  // for (auto mod: setup.modules)
-  //   mod->Init();
-  
+  setup.InitModules();
   // setup.SetupPowerOut();
     
-  // while (true)
-  // {
-  //   for (auto mod: setup.modules)
-  //     mod->Execute();
-  // }
+  while (true)
+  {
+    setup.ExecuteModules();
+  }
 }
 
 

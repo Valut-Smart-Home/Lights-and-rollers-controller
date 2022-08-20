@@ -5,6 +5,10 @@
 
 #include "module.h"
 
+#if !__AVR__
+    using size_t = std::size_t;
+#endif
+
 namespace lights_and_rollers::base {
     class Setup
     {
@@ -15,9 +19,9 @@ namespace lights_and_rollers::base {
             void SetupPowerOut();
             void ExecuteModules();
         protected:
-            const static std::size_t N = 4;
+            const static size_t N = 4;
             lights_and_rollers::base::Module* modules[N];
-            std::size_t moduleCounter = 0;
+            size_t moduleCounter = 0;
     };
 }
 

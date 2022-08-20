@@ -29,7 +29,7 @@ namespace lights_and_rollers::base {
   }
 
   void Setup::InitModules() {
-    for (int i = 0; i<N; ++i) {
+    for (unsigned int i = 0; i<N; ++i) {
       modules[i]->Init();
     }
   }
@@ -39,7 +39,7 @@ namespace lights_and_rollers::base {
   }
 
   void Setup::ExecuteModules() {
-    for (int i = 0; i < N; ++i) {
+    for (unsigned int i = 0; i < N; ++i) {
       modules[i]->Execute();
     }
   }
