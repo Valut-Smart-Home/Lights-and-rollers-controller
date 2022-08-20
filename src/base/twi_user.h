@@ -2,12 +2,12 @@
 #define I2C_USER_H_
 
 namespace lights_and_rollers::base {
-  class I2cUser
+  class TwiUser
   {
     public:
-      I2cUser* NextI2cUser = nullptr;
+      TwiUser* NextTwiUser = nullptr;
       
-      virtual void I2cOnReady();
+      virtual void TwiOnReady();
   };
 }
 

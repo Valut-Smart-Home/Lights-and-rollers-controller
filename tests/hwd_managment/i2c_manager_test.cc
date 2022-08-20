@@ -1,24 +1,24 @@
 #include <inttypes.h>
 #include <gtest/gtest.h>
 
-#include "../../src/hwd_managment/i2c_manager.h"
-#include "../../src/base/i2c_user.h"
-#include "../../src/hardware/i2c.h"
+#include "../../src/hwd_managment/twi_manager.h"
+#include "../../src/base/twi_user.h"
+#include "../../src/hardware/twi.h"
 
-class TestUser : public lights_and_rollers::base::I2cUser {
+class TestUser : public lights_and_rollers::base::TwiUser {
     public:
         int on_ready_count;
-        void I2cOnReady() override { on_ready_count++; }
+        void TwiOnReady() override { on_ready_count++; }
 };
 
-class TestI2cHardware : public lights_and_rollers::hardware::I2c {
+class TestTwiHardware : public lights_and_rollers::hardware::Twi {
     public:
         void set_ready(bool value) {
             ready = value;
         }
 };
 
-TEST(I2cManager, CreateInstance) {
-    TestI2cHardware i2c;
-    lights_and_rollers::hwd_management::I2cManager i2cManager(&i2c);
+TEST(TwiManager, CreateInstance) {
+    TestTwiHardware twi;
+    lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
 }

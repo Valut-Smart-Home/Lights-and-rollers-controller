@@ -4,27 +4,27 @@
 #include <inttypes.h>
 
 #include "../base/module.h"
-#include "../base/i2c_user.h"
-#include "../hardware/i2c.h"
+#include "../base/twi_user.h"
+#include "../hardware/twi.h"
 
 namespace lights_and_rollers::hwd_management {
-  class I2cManager : public base::Module
+  class TwiManager : public base::Module
   {
     public:
-      I2cManager(hardware::I2c* i2c): base::Module(base::Stage::kHardwareMangement), i2c_(i2c) { }
+      TwiManager(hardware::Twi* twi): base::Module(base::Stage::kHardwareMangement), twi_(twi) { }
 
       void Execute() override;
 
-      void RegisterUser(base::I2cUser* user);
+      void RegisterUser(base::TwiUser* user);
       void NextUser();
 
       void Read(uint8_t id, uint8_t address, uint8_t count);
       void Write(uint8_t id, uint8_t address, uint8_t count);
 
     private:
-      base::I2cUser* firstUser_;
-      base::I2cUser* currentUser_;
-      const hardware::I2c* i2c_;
+      base::TwiUser* firstUser_;
+      base::TwiUser* currentUser_;
+      const hardware::Twi* twi_;
   };
 }
 

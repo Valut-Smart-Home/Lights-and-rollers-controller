@@ -6,10 +6,10 @@
 #include "../base/module.h"
 
 namespace lights_and_rollers::hardware {
-  class I2c : public base::Module
+  class Twi : public base::Module
   {
     public:
-      I2c(): base::Module(base::Stage::kHardwareInteraction) { }
+      Twi(): base::Module(base::Stage::kHardwareInteraction) { }
 
       void Init() override;
       void Execute() override;

@@ -4,22 +4,22 @@
 #include <inttypes.h>
 
 #include "../base/module.h"
-#include "../base/i2c_user.h"
+#include "../base/twi_user.h"
 #include "../hardware/time.h"
-#include "../hwd_managment/i2c_manager.h"
+#include "../hwd_managment/twi_manager.h"
 
 namespace lights_and_rollers::input {
-  class Button : public base::Module, public base::I2cUser
+  class Button : public base::Module, public base::TwiUser
   {
     public:
-      Button(hardware::Time* time, hwd_management::I2cManager* i2c) : base::Module(base::Stage::kInterpretateInputs), time_(time), i2c_(i2c) { }
+      Button(hardware::Time* time, hwd_management::TwiManager* twi) : base::Module(base::Stage::kInterpretateInputs), time_(time), twi_(twi) { }
 
       void Init() override;
       void Execute() override;
     
     private:
       const hardware::Time* time_;
-      const hwd_management::I2cManager* i2c_;
+      const hwd_management::TwiManager* twi_;
   };
 }
 

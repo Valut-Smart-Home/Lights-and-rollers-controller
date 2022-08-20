@@ -20,7 +20,7 @@ int main()
     // Settings
     // eeprom
 // Stage 0 - Hardware interaction
-    // i2c
+    // twi
     // uart
     // AC
     // TIME
