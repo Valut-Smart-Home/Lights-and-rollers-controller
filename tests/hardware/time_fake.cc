@@ -6,7 +6,12 @@ void lights_and_rollers::hardware::Time::Init()
 void lights_and_rollers::hardware::Time::Execute()
 { }
 
-unsigned long lights_and_rollers::hardware::Time::millis()
+const unsigned long& lights_and_rollers::hardware::Time::ticks()
 {
-    return 0UL;
+    return currentTicks;
+}
+
+unsigned long lights_and_rollers::hardware::Time::msToTicks(const unsigned long&& ms)
+{
+    return ms;
 }
