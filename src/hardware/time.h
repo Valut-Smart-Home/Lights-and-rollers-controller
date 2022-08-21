@@ -15,7 +15,7 @@ namespace lights_and_rollers::hardware {
       void Init() override;
       void Execute() override;
 
-      const unsigned long& ticks();
+      const unsigned long& ticks()  { return currentTicks; }
       static inline unsigned long msToTicks(const unsigned long&& ms);
 
     protected:

@@ -1,5 +1,6 @@
 #include "twi.h"
 
+#include <inttypes.h>
 #include <avr/io.h>
 
 enum class twi_status : uint8_t
@@ -38,13 +39,13 @@ inline void twi_stop()
   TWCR = _BV(TWINT) | _BV(TWEN) | _BV(TWSTO);
 }
 
-inline void twi_send(const uint8_t&& byte)
+inline void twi_send(const uint8_t& value)
 {
-  TWDR = byte;
+  TWDR = value;
   TWCR = _BV(TWINT) | _BV(TWEN);
 }
 
-inline const uint8_t& twi_read()
+inline const uint8_t twi_read()
 {
   return TWDR;
 }
@@ -81,7 +82,7 @@ namespace lights_and_rollers::hardware
       (1 << TWEN) |
       (0 << TWIE);
     
-    state_ = twi_state::waiting;
+    state_ = (uint8_t)twi_state::waiting;
   }
 
   void Twi::Execute()
@@ -92,51 +93,52 @@ namespace lights_and_rollers::hardware
 
     switch (state_)
     {
-    case twi_state::starting:
-      if (twi_getStatus() == twi_status::Start_OK) {
+    case (uint8_t)twi_state::starting:
+      if (twi_getStatus() == (uint8_t)twi_status::Start_OK) {
         twi_send(buffer[0]);
         state_ = buffer[0] & 0x01 
-          ? twi_state::addressing_w 
-          : twi_state::addressing_r;
+          ? (uint8_t)twi_state::addressing_w 
+          : (uint8_t)twi_state::addressing_r;
       } else {
-        state_ = twi_state::stoping;
+        state_ = (uint8_t)twi_state::stoping;
       }
       break;
     
-    case twi_state::addressing_w:
-      if (twi_getStatus() == twi_status::SLA_W_Transmited_ACK) {
-        twi_send[++bufferIndex_];
-        state_ = twi_state::transmiting;
+    case (uint8_t)twi_state::addressing_w:
+      if (twi_getStatus() == (uint8_t)twi_status::SLA_W_Transmited_ACK) {
+        ++bufferIndex_;
+        twi_send(buffer[bufferIndex_]);
+        state_ = (uint8_t)twi_state::transmiting;
       } else {
-        state_ = twi_state::stoping;
+        state_ = (uint8_t)twi_state::stoping;
       }
       break;
 
-    case twi_state::transmiting:
-      if (twi_getStatus() == twi_status::Data_Transmited_ACK) {
+    case (uint8_t)twi_state::transmiting:
+      if (twi_getStatus() == (uint8_t)twi_status::Data_Transmited_ACK) {
         if (bufferIndex_ < count_) {
-          twi_send(buffer[++bufferIndex_])
+          twi_send(buffer[++bufferIndex_]);
         } else {
           twi_stop();
-          state_ = twi_state::waiting;
+          state_ = (uint8_t)twi_state::waiting;
         }
       } else {
-        state_ = twi_state::stoping;
+        state_ = (uint8_t)twi_state::stoping;
       }
       break;
     
-    case twi_state::addressing_r:
-      if (twi_getStatus() == twi_status::SLA_R_Transmited_ACK) {
+    case (uint8_t)twi_state::addressing_r:
+      if (twi_getStatus() == (uint8_t)twi_status::SLA_R_Transmited_ACK) {
         twi_send_ack();
         ++bufferIndex_;
-        state_ = twi_state::receiving;
+        state_ = (uint8_t)twi_state::receiving;
       } else {
-        state_ = twi_state::stoping;
+        state_ = (uint8_t)twi_state::stoping;
       }
       break;
 
-    case twi_state::receiving:
-      if (twi_getStatus() == twi_status::Data_Received_ACK) {
+    case (uint8_t)twi_state::receiving:
+      if (twi_getStatus() == (uint8_t)twi_status::Data_Received_ACK) {
         buffer[bufferIndex_] = twi_read();
         ++bufferIndex_;
         if (bufferIndex_ <= count_) {
@@ -146,12 +148,12 @@ namespace lights_and_rollers::hardware
           twi_send_nack();
         }
       }
-      state_ = twi_state::stoping;
+      state_ = (uint8_t)twi_state::stoping;
       break;
 
-    case twi_state::stoping:
+    case (uint8_t)twi_state::stoping:
       twi_stop();
-      state_ = twi_state::waiting;
+      state_ = (uint8_t)twi_state::waiting;
       break;
 
     default:
@@ -161,7 +163,7 @@ namespace lights_and_rollers::hardware
 
   bool Twi::is_ready()
   {
-    return state_ == twi_state::waiting && twi_isReady();
+    return state_ == (uint8_t)twi_state::waiting && twi_isReady();
   }
 
   bool Twi::is_ok()
@@ -171,14 +173,14 @@ namespace lights_and_rollers::hardware
 
   void Twi::ExecuteBuffer(const uint8_t&& count)
   {
-    if (state == twi_state::waiting) {
+    if (state_ == (uint8_t)twi_state::waiting) {
       ok_ = false;
       bufferIndex_ = 0;
       count_ = count;
       
       if (count) {
         twi_start();
-        state_ = twi_state::starting;
+        state_ = (uint8_t)twi_state::starting;
       }
     }
   }

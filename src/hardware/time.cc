@@ -18,16 +18,11 @@ namespace lights_and_rollers::hardware
 
   void Time::Execute()
   {
-    static uint8_t last_value;
+    static uint8_t lastValue;
 
     uint8_t curValue = TCNT0;
     currentTicks += curValue - lastValue;
     lastValue = curValue;
-  }
-
-  const unsigned long& Time::ticks()
-  {
-    return currentTicks;
   }
 
   unsigned long Time::msToTicks(const unsigned long&& ms)

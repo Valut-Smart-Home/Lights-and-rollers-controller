@@ -41,8 +41,4 @@ namespace lights_and_rollers::hardware {
       adc_start();
     }
   }
-
-  const uint8_t& Adc::last_readed() {
-    return lastReaded;
-  }
 }

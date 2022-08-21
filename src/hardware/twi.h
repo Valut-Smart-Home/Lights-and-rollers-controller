@@ -1,5 +1,5 @@
-#ifndef I2C_H_
-#define I2C_H_
+#ifndef TWI_H_
+#define TWI_H_
 
 #include <inttypes.h>
 
@@ -29,4 +29,4 @@ namespace lights_and_rollers::hardware {
   };
 }
 
-#endif  // I2C_H_
+#endif  // TWI_H_
