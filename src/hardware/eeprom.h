@@ -7,11 +7,10 @@ namespace lights_and_rollers::hardware {
   class Eeprom
   {
     public:
-      void Init();
-      void Save();
-      void Load();
-
-      bool is_ready();
+      static void SaveConfiguration();
+      static void LoadConfiguration();
+      static void SaveLights();
+      static void LoadLights();
   };
 }
 

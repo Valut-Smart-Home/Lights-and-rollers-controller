@@ -1,15 +1,15 @@
 #include "../../src/hardware/eeprom.h"
 
-void lights_and_rollers::hardware::Eeprom::Init()
-{ }
+namespace lights_and_rollers::hardware {
+    void Eeprom::SaveConfiguration() {
+    }
 
-bool lights_and_rollers::hardware::Eeprom::is_ready()
-{ 
-    return false;
+    void Eeprom::LoadConfiguration() {
+    }
+
+    void Eeprom::SaveLights() {
+    }
+
+    void Eeprom::LoadLights() {
+    }
 }
-
-void lights_and_rollers::hardware::Eeprom::Load()
-{ }
-
-void lights_and_rollers::hardware::Eeprom::Save()
-{ }
