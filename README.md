@@ -32,3 +32,7 @@ Currently controller can set lights ON or OFF based on pushing switches. Control
 - Controll the rollers
 - Programmed switch bechavior
 - Svaing last state before power off and bring it back after power on
+
+### Documentation links
+- [ATmega328P](https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf)
+- [Arduino Nano](https://docs.arduino.cc/static/4eceaf02a091433c76849f2b5bf8422a/A000005-datasheet.pdf) Board and [schematic](https://docs.arduino.cc/static/59500e84ace853fee30c7854084c2e2c/schematics.pdf)

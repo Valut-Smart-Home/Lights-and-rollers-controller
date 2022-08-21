@@ -2,6 +2,7 @@
 
 // TIMER0 used by Time module
 // PC4, PC5 used by Twi module
+// PC1, PC2, PC3, ADC6, ADC7 used by ADC
 
 int main()
 {

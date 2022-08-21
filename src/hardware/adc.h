@@ -15,9 +15,12 @@ namespace lights_and_rollers::hardware {
       void Init() override;
       void Execute() override;
 
-      bool is_new_reading();
-      int last_readed();
-      uint16_t values[8];
+      const uint8_t& last_readed();
+      uint16_t values[8] {0};
+
+    protected:
+      uint8_t currentChannelIndex;
+      uint8_t lastReaded;
   };
 }
 
