@@ -22,8 +22,8 @@ namespace lights_and_rollers::hwd_management {
       void Write(uint8_t id, uint8_t address, uint8_t count);
 
     private:
-      base::TwiUser* firstUser_;
-      base::TwiUser* currentUser_;
+      base::TwiUser* firstUser_{nullptr};
+      base::TwiUser* currentUser_{nullptr};
       const hardware::Twi* twi_;
   };
 }

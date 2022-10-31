@@ -31,8 +31,8 @@ TEST(RwiManager, UsersLoop) {
   TestUser user1, user2;
   lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
   twiManager.Init();
-  twiManager.RegisterUser(&user1);
   twiManager.RegisterUser(&user2);
+  twiManager.RegisterUser(&user1);
 
   twiManager.Execute();
   twiManager.Execute();
