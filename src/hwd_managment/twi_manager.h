@@ -1,5 +1,5 @@
-#ifndef I2C_MANAGER_H_
-#define I2C_MANAGER_H_
+#ifndef TWI_MANAGER_H_
+#define TWI_MANAGER_H_
 
 #include <inttypes.h>
 
@@ -28,4 +28,4 @@ namespace lights_and_rollers::hwd_management {
   };
 }
 
-#endif  // I2C_MANAGER_H_
+#endif  // TWI_MANAGER_H_
