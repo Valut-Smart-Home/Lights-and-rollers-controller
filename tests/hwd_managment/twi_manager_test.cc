@@ -20,7 +20,7 @@ class TestTwiHardware : public lights_and_rollers::hardware::Twi {
     void set_ok(bool value) {
       ok_ = value;
     }
-    void ExecuteBuffer(const uint8_t&& count) override {
+    void ExecuteBuffer(const uint8_t& count) override {
       executed_count = count;
     }
 };

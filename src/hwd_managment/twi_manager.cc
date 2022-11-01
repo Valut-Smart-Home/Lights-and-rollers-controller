@@ -32,12 +32,14 @@ namespace lights_and_rollers::hwd_management {
 
   void TwiManager::Read(uint8_t id, uint8_t count)
   {
-
+      twi_->buffer[0] = (id << 1) + 1;
+      twi_->ExecuteBuffer(count);
   }
 
   void TwiManager::Write(uint8_t id, uint8_t count)
   {
-
+      twi_->buffer[0] = id << 1;
+      twi_->ExecuteBuffer(count);
   }
 
   uint8_t* GetBufferStart() {

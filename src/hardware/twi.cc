@@ -171,7 +171,7 @@ namespace lights_and_rollers::hardware
     return ok_;
   }
 
-  void Twi::ExecuteBuffer(const uint8_t&& count)
+  void Twi::ExecuteBuffer(const uint8_t& count)
   {
     if (state_ == (uint8_t)twi_state::waiting) {
       ok_ = false;

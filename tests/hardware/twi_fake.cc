@@ -16,5 +16,5 @@ bool lights_and_rollers::hardware::Twi::is_ok()
     return ok_;
 }
 
-void lights_and_rollers::hardware::Twi::ExecuteBuffer(const uint8_t&& count)
+void lights_and_rollers::hardware::Twi::ExecuteBuffer(const uint8_t& count)
 { }

@@ -17,7 +17,7 @@ namespace lights_and_rollers::hardware {
       bool is_ready();
       bool is_ok();
       uint8_t buffer[255];
-      virtual void ExecuteBuffer(const uint8_t&& count);
+      virtual void ExecuteBuffer(const uint8_t& count);
 
     protected:
       bool ok_{true};
