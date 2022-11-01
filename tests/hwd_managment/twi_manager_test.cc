@@ -26,7 +26,7 @@ TEST(TwiManager, CreateInstance) {
   lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
 }
 
-TEST(RwiManager, UsersLoop) {
+TEST(TwiManager, UsersLoop) {
   TestTwiHardware twi;
   TestUser user1, user2;
   lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
@@ -48,4 +48,23 @@ TEST(RwiManager, UsersLoop) {
 
   ASSERT_EQ(3, user1.on_ready_count);
   ASSERT_EQ(1, user2.on_ready_count);
+}
+
+TEST(TwiManager, WaitingForReady) {
+  TestTwiHardware twi;
+  TestUser user;
+  lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
+  twiManager.Init();
+  twiManager.RegisterUser(&user);
+
+  twiManager.Execute();
+  ASSERT_EQ(1, user.on_ready_count);
+
+  twi.set_ready(false);
+  twiManager.Execute();
+  ASSERT_EQ(1, user.on_ready_count);
+
+  twi.set_ready(true);
+  twiManager.Execute();
+  ASSERT_EQ(2, user.on_ready_count);
 }
