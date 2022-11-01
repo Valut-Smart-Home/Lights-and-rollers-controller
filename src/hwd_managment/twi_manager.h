@@ -13,13 +13,15 @@ namespace lights_and_rollers::hwd_management {
     public:
       TwiManager(hardware::Twi* twi): base::Module(base::Stage::kHardwareMangement), twi_(twi) { }
 
+      void Init() override;
       void Execute() override;
 
       void RegisterUser(base::TwiUser* user);
       void NextUser();
 
-      void Read(uint8_t id, uint8_t address, uint8_t count);
-      void Write(uint8_t id, uint8_t address, uint8_t count);
+      void Read(uint8_t id, uint8_t count);
+      void Write(uint8_t id, uint8_t count);
+      uint8_t* GetBufferStart();
 
     private:
       base::TwiUser* firstUser_{nullptr};

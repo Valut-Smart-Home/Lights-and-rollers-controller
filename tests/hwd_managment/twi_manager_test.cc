@@ -13,11 +13,15 @@ class TestUser : public lights_and_rollers::base::TwiUser {
 
 class TestTwiHardware : public lights_and_rollers::hardware::Twi {
   public:
+    uint8_t executed_count{0};
     void set_ready(bool value) {
       state_ = !value;
     }
     void set_ok(bool value) {
       ok_ = value;
+    }
+    void ExecuteBuffer(const uint8_t&& count) override {
+      executed_count = count;
     }
 };
 
@@ -67,4 +71,24 @@ TEST(TwiManager, WaitingForReady) {
   twi.set_ready(true);
   twiManager.Execute();
   ASSERT_EQ(2, user.on_ready_count);
+}
+
+TEST(TwiManager, ReadExecute) {
+  TestTwiHardware twi;
+  lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
+  twiManager.Init();
+
+  twiManager.Read(20, 5);
+  ASSERT_EQ(41, twi.buffer[0]);
+  ASSERT_EQ(5, twi.executed_count);
+}
+
+TEST(TwiManager, WriteExecute) {
+  TestTwiHardware twi;
+  lights_and_rollers::hwd_management::TwiManager twiManager(&twi);
+  twiManager.Init();
+
+  twiManager.Write(20, 5);
+  ASSERT_EQ(40, twi.buffer[0]);
+  ASSERT_EQ(5, twi.executed_count);
 }

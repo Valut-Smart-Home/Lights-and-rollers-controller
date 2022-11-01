@@ -1,6 +1,12 @@
 #include "twi_manager.h"
 
+uint8_t* buffer_start;
+
 namespace lights_and_rollers::hwd_management {
+  void TwiManager::Init() {
+    buffer_start = twi_->buffer + 1;
+  }
+
   void TwiManager::Execute()
   {
     if (currentUser_ == nullptr) {
@@ -24,13 +30,17 @@ namespace lights_and_rollers::hwd_management {
     }
   }
 
-  void TwiManager::Read(uint8_t id, uint8_t address, uint8_t count)
+  void TwiManager::Read(uint8_t id, uint8_t count)
   {
 
   }
 
-  void TwiManager::Write(uint8_t id, uint8_t address, uint8_t count)
+  void TwiManager::Write(uint8_t id, uint8_t count)
   {
 
+  }
+
+  uint8_t* GetBufferStart() {
+    return buffer_start;
   }
 }
