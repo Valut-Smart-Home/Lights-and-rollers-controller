@@ -7,7 +7,7 @@ namespace lights_and_rollers::base {
     public:
       TwiUser* NextTwiUser = nullptr;
       
-      virtual void TwiOnReady() = 0;
+      virtual void TwiOnReady(bool last_command_success) = 0;
   };
 }
 

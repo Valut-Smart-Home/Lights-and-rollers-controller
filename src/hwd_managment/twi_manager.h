@@ -24,7 +24,7 @@ namespace lights_and_rollers::hwd_management {
     private:
       base::TwiUser* firstUser_{nullptr};
       base::TwiUser* currentUser_{nullptr};
-      const hardware::Twi* twi_;
+      hardware::Twi* twi_;
   };
 }
 

@@ -20,8 +20,8 @@ namespace lights_and_rollers::hardware {
       void ExecuteBuffer(const uint8_t&& count);
 
     protected:
-      bool ok_;
-      uint8_t state_;
+      bool ok_{true};
+      uint8_t state_{0U};
 
     private:
       uint8_t count_;

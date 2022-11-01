@@ -8,7 +8,7 @@
 class TestUser : public lights_and_rollers::base::TwiUser {
   public:
     int on_ready_count{0};
-    void TwiOnReady() override { on_ready_count++; }
+    void TwiOnReady(bool last_command_success) override { on_ready_count++; }
 };
 
 class TestTwiHardware : public lights_and_rollers::hardware::Twi {

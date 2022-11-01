@@ -6,8 +6,8 @@ namespace lights_and_rollers::hwd_management {
     if (currentUser_ == nullptr) {
       currentUser_ = firstUser_;
     }
-    if (currentUser_ != nullptr) {
-      currentUser_->TwiOnReady();
+    if (currentUser_ != nullptr && twi_->is_ready()) {
+      currentUser_->TwiOnReady(twi_->is_ok());
     }
   }
 
