@@ -5,8 +5,8 @@
 #include "../hardware/time.h"
 #include "../hardware/uart.h"
 #include "../hwd_managment/twi_manager.h"
-// #include "../input/button.h"
-// #include "../input/roller.h"
+#include "../inputRead/external_io_reader.h"
+#include "../inputProcess/button_manager.h"
 
 lights_and_rollers::hardware::Eeprom eeprom = {};
 
@@ -22,7 +22,9 @@ namespace lights_and_rollers::base {
 
     CREATE_MODULE(hwd_management::TwiManager, twiManager, &twi);
 
-    // CREATE_MODULE(input::Button, btn_input, &time, &twiManager)
+    CREATE_MODULE(inputRead::ExternalIoReader, io_reader, &twiManager)
+
+    CREATE_MODULE(inputProcess::ButtonManager, btn_manager, &time, &io_reader)
 
     #undef CREATE_MODULE
   }

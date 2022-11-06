@@ -1,1 +1,0 @@
-//Receive values from twi to check if are equal needed ones
